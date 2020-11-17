@@ -1,38 +1,32 @@
 import React, { Component } from 'react';
 import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Swiper from 'react-native-swiper';
-import GradientContainer from '../components/cbcontainer';
+import GradientContainer from '../../components/cbcontainer';
 import LottieView from 'lottie-react-native';
-import Assets from '../assets';
-import Logo from '../components/logo';
-import Arrow from '../components/arrow';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import Assets from '../../../assets';
+import Logo from '../../components/logo';
+import Arrow from '../../components/arrow';
 
 const slides = [
     {
         id: 'slide1',
         title: 'Enter the new age of digital ATM',
-        lottieFile: Assets.GIRLSITTING,
-        description:
-            'Easy and fast way to order food from the best local restaurant.',
+        lottieFile: Assets.GIRLSITTING
     },
     {
-        id: 'slide1',
+        id: 'slide2',
         title: 'Withdraw money from shops near you',
-        lottieFile: Assets.SHOPOWNER,
-        description: 'Browse through menu and reviews to find the food you like.',
+        lottieFile: Assets.SHOPOWNER
     },
     {
         id: 'slide3',
         title: 'Forget waiting in ATM lines. Use CashBerry',
-        lottieFile: Assets.SKATER,
-        description: 'Pay online with credit card. Click, sit back and relax.',
+        lottieFile: Assets.SKATER
     },
     {
         id: 'slide4',
         title: 'Use your smartphone to withdraw money securely',
-        lottieFile: Assets.BUSINESSMAN,
-        description: 'Get food to your door in minutes. We deliver, you enjoy!',
+        lottieFile: Assets.BUSINESSMAN
     },
 ];
 
@@ -54,13 +48,27 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         width: '65%'
     },
-    imageDimnestion: {
+    imageDimension: {
         width: '75%',
     },
+    dot: {
+        width: 5,
+        height: 5,
+        borderRadius: 5,
+        backgroundColor: '#fff'
+    },
+    activeDot: {
+        width: 20
+    },
+    inactiveDot: {
+        opacity: 0.5,
+    }
 });
 
 
-export class Onboarding extends React.Component {
+export class Onboarding extends React.Component<any, any> {
+    swiper: any;
+
     constructor(props: any) {
         super(props);
         this.state = {
@@ -68,10 +76,36 @@ export class Onboarding extends React.Component {
         }
     }
 
+    onIndexChanged = (index: number) => {
+        let activeIndex;
+        /*if (isRTL) {
+            activeIndex = slides.length - 1 - index;
+        } else {
+            activeIndex = index;
+        }*/
+        this.setState({
+            activeIndex: index,
+        });
+    };
+
+    previousSlide = () => {
+        this.swiper.scrollBy(-1, true);
+    };
+
+    nextSlide = () => {
+        this.swiper.scrollBy(1, true);
+    };
+
+    navigateTo(screen: string) {
+        const { navigation } = this.props;
+        navigation.navigate(screen);
+    }
+
     render() {
+        const {activeIndex} = this.state;
+
         return (
             <GradientContainer>
-                <SafeAreaView style={{ flex: 1 }}>
                     <View style={{
                         paddingHorizontal: 30,
                         paddingVertical: 15,
@@ -84,24 +118,37 @@ export class Onboarding extends React.Component {
                         flexDirection: 'column',
                         flexGrow: 1,
                     }}>
-                        <View style={{
-                            height: '65%',
-                            alignItems: 'center',
-                        }}>
-                            <LottieView
-                                style={styles.imageDimnestion}
-                                source={Assets.GIRLSITTING} autoPlay loop
-                                resizeMode="cover"
-                            />
-                        </View>
-                        <View style={{
-                            height: '20%',
-                            alignItems: 'center',
-                        }}>
-                            <Text style={styles.text}>
-                                Enter the new age of digital ATM
-                        </Text>
-                        </View>
+                        <Swiper
+                            ref={swiper => {
+                                this.swiper = swiper;
+                            }}
+                            index={0}
+                            onIndexChanged={this.onIndexChanged}
+                            loop={false}
+                            showsPagination={false}>
+                            {slides.map(item => (
+                                <View key={item.id} style={{ flex: 1 }}>
+                                    <View style={{
+                                        height: '65%',
+                                        alignItems: 'center',
+                                    }}>
+                                        <LottieView
+                                            style={styles.imageDimension}
+                                            source={item.lottieFile} autoPlay loop
+                                            resizeMode="cover"
+                                        />
+                                    </View>
+                                    <View style={{
+                                        height: '20%',
+                                        alignItems: 'center',
+                                    }}>
+                                        <Text style={styles.text}>
+                                            {item.title}
+                                        </Text>
+                                    </View>
+                                </View>
+                            ))}
+                        </Swiper>
                     </View>
                     <View style={{
                         height: 60,
@@ -119,24 +166,15 @@ export class Onboarding extends React.Component {
                             flexDirection: 'row',
                             alignItems: 'center'
                         }}>
-                            <View style={{
-                                width: 20,
-                                height: 5,
-                                borderRadius: 5,
-                                backgroundColor: '#fff'
-                            }} />
-                            <View style={{
-                                width: 5,
-                                height: 5,
-                                borderRadius: 5,
-                                backgroundColor: '#fff'
-                            }} />
-                            <View style={{
-                                width: 5,
-                                height: 5,
-                                borderRadius: 5,
-                                backgroundColor: '#fff'
-                            }} />
+                            {slides.map((item, i) => (
+                                <View
+                                    key={`dot_${item.id}`}
+                                    style={[
+                                        styles.dot,
+                                        activeIndex === i ? styles.activeDot : styles.inactiveDot,
+                                    ]}
+                                />
+                            ))}
                         </View>
                         <View style={{
                             position: "absolute",
@@ -144,7 +182,7 @@ export class Onboarding extends React.Component {
                             flexDirection: 'row',
                             alignItems: 'center'
                         }}>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => this.navigateTo('loginscreen')}>
                                 <View style={{
                                     flexDirection: 'row',
                                     alignItems: 'center'
@@ -160,7 +198,6 @@ export class Onboarding extends React.Component {
                             </TouchableOpacity>
                         </View>
                     </View>
-                </SafeAreaView>
             </GradientContainer>
         );
     }

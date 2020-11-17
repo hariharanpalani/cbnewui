@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
-import GradientContainer from '../components/cbcontainer';
+import GradientContainer from '../../components/cbcontainer';
 import LottieView from 'lottie-react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import Assets from '../assets';
+import Assets from '../../../assets';
 
 const styles = StyleSheet.create({
     loading: {
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     }
 });
 
-export class SplashScreen extends React.Component {
+export class SplashScreen extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
         this.state = {

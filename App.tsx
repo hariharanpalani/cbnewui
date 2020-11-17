@@ -12,7 +12,7 @@ import {
   StatusBar,
 } from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import MainNavigator from './navigation/mainnavigator';
+import MainNavigator from './src/containers/navigation/mainnavigator';
 import {enableScreens} from 'react-native-screens';
 
 enableScreens();

@@ -12,9 +12,10 @@ import {
     StatusBar,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient'
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default class GradientContainer extends React.Component {
-    constructor(props: any){
+    constructor(props: any) {
         super(props);
     }
 
@@ -27,9 +28,11 @@ export default class GradientContainer extends React.Component {
                     style={styles.container}
                     start={{ x: 1, y: 0 }}
                     end={{ x: 0, y: 1 }}
-                    locations={[0, 0.5, 1, 1]}
+                    locations={[0, 0.2, 1, 1]}
                 >
-                    {this.props.children}
+                    <SafeAreaView style={{ flex: 1 }}>
+                        {this.props.children}
+                    </SafeAreaView>
                 </LinearGradient>
             </>
         );
